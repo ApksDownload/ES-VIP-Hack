@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Download | Elite Security Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e63946;
+            --primary-dark: #d00000;
+            --secondary: #1d3557;
+            --dark: #0a0a0a;
+            --light: #f1faee;
+            --accent: #ff9e00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid rgba(230, 57, 70, 0.3);
+            padding-bottom: 1rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+        
+        .app-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .app-card {
+            background: rgba(13, 13, 13, 0.8);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid rgba(230, 57, 70, 0.2);
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.1),
+                        0 0 0 1px rgba(230, 57, 70, 0.1),
+                        inset 0 0 20px rgba(230, 57, 70, 0.1);
+            backdrop-filter: blur(5px);
+            transform-style: preserve-3d;
+            transform: rotateX(5deg);
+            transition: all 0.5s ease;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-card:hover {
+            transform: rotateX(0deg) translateY(-10px);
+            box-shadow: 0 15px 40px rgba(230, 57, 70, 0.3),
+                        0 0 0 1px rgba(230, 57, 70, 0.2),
+                        inset 0 0 30px rgba(230, 57, 70, 0.2);
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-shadow: 0 0 10px var(--primary);
+            letter-spacing: 3px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            font-weight: 300;
+        }
+        
+        .about {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            color: rgba(241, 250, 238, 0.9);
+            position: relative;
+            padding: 2rem;
+            background: rgba(29, 53, 87, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .about::before {
+            content: ">";
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            color: var(--primary);
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .about::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transform-style: preserve-3d;
+        }
+        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.6);
+        }
+        
+        .download-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .download-btn .icon {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .download-btn:hover .icon {
+            transform: translateX(3px);
+        }
+        
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(10, 10, 10, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+        
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at center, rgba(230, 57, 70, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse 8s infinite alternate;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateY(5deg); }
+            100% { transform: translateY(0px) rotateY(0deg); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.1; }
+            100% { opacity: 0.3; }
+        }
+        
+        .binary-code {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.03);
+            font-size: 0.8rem;
+            font-family: monospace;
+            user-select: none;
+            z-index: -1;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(230, 57, 70, 0.3);
+            font-size: 0.9rem;
+            color: rgba(241, 250, 238, 0.6);
+        }
+        
+        /* New Unique Elements */
+        .cyber-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px dashed rgba(230, 57, 70, 0.3);
+            top: -150px;
+            right: -150px;
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+        
+        .cyber-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: auto;
+            bottom: -100px;
+            left: -100px;
+            animation-direction: reverse;
+        }
+        
+        .data-stream {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(transparent, rgba(230, 57, 70, 0.05));
+            z-index: -1;
+        }
+        
+        .holographic-line {
+            position: absolute;
+            height: 100%;
+            width: 1px;
+            background: linear-gradient(transparent, var(--primary), transparent);
+            left: 50%;
+            top: 0;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .version-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(230, 57, 70, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .app-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cyber-circle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles-js"></div>
+    <div class="scanlines"></div>
+    <div class="glow"></div>
+    <div class="cyber-circle"></div>
+    <div class="cyber-circle"></div>
+    <div class="data-stream"></div>
+    <div class="holographic-line"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="App Logo" class="logo">
+                <span class="app-name">NEXUS</span>
+            </div>
+        </header>
+        
+        <main class="main-content">
+            <div class="app-card">
+                <div class="version-badge">v4.2.1</div>
+                <h1>ELITE SECURITY SUITE</h1>
+                <p class="tagline">Next-Gen Protection for the Digital Frontier</p>
+                
+                <div class="about">
+                    Nexus Elite Security Suite revolutionizes mobile protection with its cutting-edge quantum encryption and AI-driven threat detection system. This all-in-one solution offers real-time monitoring that predicts and neutralizes threats before they occur, military-grade encryption that adapts to counter emerging decryption techniques, and an invisible stealth mode that makes your device undetectable to network scans. With a sleek interface designed for power users, Nexus provides comprehensive security without compromising performance. The package includes advanced features like automated vulnerability patching, secure VPN tunneling, and a self-destruct mechanism for sensitive data. At just 87.5MB, this lightweight powerhouse supports Android 9.0 and above, delivering enterprise-level security for personal devices.
+                </div>
+                
+                <button class="download-btn" id="downloadBtn">
+                    DOWNLOAD APK <span class="icon">↓</span>
+                </button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2023 Nexus Security Systems. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#e63946"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#e63946",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+        
+        // Generate random binary code elements
+        function createBinaryCode() {
+            const container = document.querySelector('.container');
+            const binaryChars = '01';
+            
+            for (let i = 0; i < 50; i++) {
+                const element = document.createElement('div');
+                element.className = 'binary-code';
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                element.style.left = `${left}%`;
+                element.style.top = `${top}%`;
+                
+                // Random binary text
+                let binaryText = '';
+                const length = Math.floor(Math.random() * 50) + 20;
+                for (let j = 0; j < length; j++) {
+                    binaryText += binaryChars.charAt(Math.floor(Math.random() * binaryChars.length));
+                }
+                element.textContent = binaryText;
+                
+                container.appendChild(element);
+            }
+        }
+        
+        // Download button functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a cool effect when downloading
+            const btn = this;
+            btn.innerHTML = 'INITIATING DOWNLOAD <span class="icon">⌛</span>';
+            
+            // Simulate download progress (replace with actual download in production)
+            setTimeout(() => {
+                btn.innerHTML = 'DOWNLOADING... 25%';
+                setTimeout(() => {
+                    btn.innerHTML = 'DOWNLOADING... 75%';
+                    setTimeout(() => {
+                        btn.innerHTML = 'INSTALLATION READY <span class="icon">✓</span>';
+                        // This would be the actual download code:
+                        // window.location.href = 'path/to/your/app.apk';
+                    }, 800);
+                }, 800);
+            }, 800);
+        });
+        
+        // Initialize on load
+        window.addEventListener('load', function() {
+            createBinaryCode();
+            
+            // Add 3D tilt effect to card
+            const card = document.querySelector('.app-card');
+            if (card) {
+                card.addEventListener('mousemove', (e) => {
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                    card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+                
+                // Reset when mouse leaves
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                });
+            }
+            
+            // Add typing effect to about text
+            const aboutText = document.querySelector('.about');
+            if (aboutText) {
+                const originalText = aboutText.textContent;
+                aboutText.textContent = '';
+                let i = 0;
+                const typing = setInterval(() => {
+                    if (i < originalText.length) {
+                        aboutText.textContent += originalText.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(typing);
+                    }
+                }, 10);
+            }
+        });
+    </script>
+</body>
+</html>
